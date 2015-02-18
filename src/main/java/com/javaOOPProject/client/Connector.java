@@ -43,7 +43,9 @@ public class Connector {
     public void sentRequestToServer(Client c) throws IOException {
         this.socket = new Socket(InetAddress.getByName(host), port);
         oos = new ObjectOutputStream(socket.getOutputStream());
-        oos.writeObject(XMLManager.createXML(c));
+        String temp = XMLManager.createXML(c);
+        System.out.println(temp);
+        oos.writeObject(temp);
     }
 
     public String recieveMassageFromServer() throws IOException {
@@ -54,6 +56,7 @@ public class Connector {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
+        System.out.println(message);
         return message;
     }
     

@@ -14,9 +14,9 @@ public class Client {
     private String username;
     @XmlElement(name = "password")
     private String password;
-    @XmlElement(name = "cards")
+//    @XmlElement(name = "cards")
     private ArrayList<Integer> cardNumbers;
-    @XmlElement(name = "message")
+//    @XmlElement(name = "message")
     private String message;
     
 
@@ -36,6 +36,7 @@ public class Client {
         return this.username;
     }
     
+    @XmlElement(name = "message")
     public String getMessage(){
         return this.message;
     }
@@ -44,6 +45,7 @@ public class Client {
         return this.password;
     }
     
+//    @XmlElement(name = "cards")
     public ArrayList<Integer> getCardNumbers(){
         return this.cardNumbers;
     }

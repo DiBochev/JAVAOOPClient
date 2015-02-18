@@ -1,11 +1,7 @@
 package com.javaOOPProject.client;
 
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,52 +19,50 @@ import org.w3c.dom.Element;
  */
 public class XMLManager {
 
-    public static String createXML(Client client){
-        StringWriter writer = new StringWriter();
-        try {
-            JAXBContext context = JAXBContext.newInstance(Client.class);
-            Marshaller m = context.createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.marshal(client, writer);
-            System.out.println(writer.toString());
-            return writer.toString();
-        } catch (JAXBException ex) {
-            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            return writer.toString();
-        }
-    }
-
-    public static String createResponse(Client client) {
+    public static String createXML(Client client) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-            // root elements
+            // root element
             Document doc = docBuilder.newDocument();
             Element rootElement = doc.createElement("client");
             doc.appendChild(rootElement);
 
-            // firstname elements
+            // username element
             Element username = doc.createElement("username");
             username.appendChild(doc.createTextNode(client.getUsername()));
             rootElement.appendChild(username);
 
-            // lastname elements
+            // password element
             Element password = doc.createElement("password");
             password.appendChild(doc.createTextNode(client.getPassword()));
             rootElement.appendChild(password);
 
-            // nickname elements
+            // permissionForCrypt element
             Element permissionForCrypt = doc.createElement("permissionForCrypt");
-            permissionForCrypt.appendChild(doc.createTextNode("true"));
+            permissionForCrypt.appendChild(doc.createTextNode(""));
             rootElement.appendChild(permissionForCrypt);
-
+            
+            // card element
+            if (client.getCardNumbers() != null) {
+                for (int i = 0; i < client.getCardNumbers().size() - 1; i++) {
+                    Element card = doc.createElement("card");
+                    card.appendChild(doc.createTextNode(client.getCardNumbers().get(i).toString()));
+                    rootElement.appendChild(card);
+                }
+            }else{
+                Element card = doc.createElement("card");
+                    card.appendChild(doc.createTextNode(""));
+                    rootElement.appendChild(card);
+            }
+            
             // write the content into xml String
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
-            System.out.println(writer.getBuffer().toString());
+//            System.out.println(writer.getBuffer().toString());
 
             return writer.getBuffer().toString();
 
